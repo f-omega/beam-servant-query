@@ -1,0 +1,40 @@
+name: beam-servant-query
+version: 1.0.0
+description: Easy queries with servant and beam
+
+dependencies:
+  - base
+  - aeson
+  - base64
+  - beam-core
+  - beam-postgres
+  - servant
+  - servant-client
+  - servant-client-core
+  - servant-server
+  - text
+  - time
+  - unordered-containers
+  - vector
+  - wai
+
+default-extensions:
+  - RankNTypes
+  - KindSignatures
+  - DerivingStrategies
+  - TypeApplications
+  - ScopedTypeVariables
+  - TypeOperators
+  - StandaloneDeriving
+  - DataKinds
+  - GADTs
+  - FlexibleInstances
+  - FlexibleContexts
+  - MultiParamTypeClasses
+  - TypeFamilies
+  - PolyKinds
+  - DeriveAnyClass
+
+library:
+  exposed-modules:
+    - Servant.Beam.Query
