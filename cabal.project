@@ -1,0 +1,22 @@
+packages: .
+
+source-repository-package
+  type: git
+  location: https://github.com/haskell-beam/beam.git
+  tag: v0.10.0.0
+  subdir: beam-core
+  --sha256: sha256-KTIHImeKZii7WEBhHkGI/ILkhQocfYpeQ04swCFi2xc=
+
+source-repository-package
+  type: git
+  location: https://github.com/haskell-beam/beam.git
+  tag: v0.10.0.0
+  subdir: beam-migrate
+  --sha256: sha256-KTIHImeKZii7WEBhHkGI/ILkhQocfYpeQ04swCFi2xc=
+
+source-repository-package
+  type: git
+  location: https://github.com/haskell-beam/beam.git
+  tag: v0.10.0.0
+  subdir: beam-postgres
+  --sha256: sha256-KTIHImeKZii7WEBhHkGI/ILkhQocfYpeQ04swCFi2xc=
