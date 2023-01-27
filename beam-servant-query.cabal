@@ -1,0 +1,48 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.34.7.
+--
+-- see: https://github.com/sol/hpack
+
+name:           beam-servant-query
+version:        1.0.0
+description:    Easy queries with servant and beam
+build-type:     Simple
+
+library
+  exposed-modules:
+      Servant.Beam.Query
+  other-modules:
+      Paths_beam_servant_query
+  default-extensions:
+      RankNTypes
+      KindSignatures
+      DerivingStrategies
+      TypeApplications
+      ScopedTypeVariables
+      TypeOperators
+      StandaloneDeriving
+      DataKinds
+      GADTs
+      FlexibleInstances
+      FlexibleContexts
+      MultiParamTypeClasses
+      TypeFamilies
+      PolyKinds
+      DeriveAnyClass
+  build-depends:
+      aeson
+    , base
+    , base64
+    , beam-core
+    , beam-postgres
+    , servant
+    , servant-client
+    , servant-client-core
+    , servant-server
+    , text
+    , time
+    , unordered-containers
+    , vector
+    , wai
+  default-language: Haskell2010
