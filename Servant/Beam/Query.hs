@@ -1,4 +1,4 @@
-{-# LANGUAGE AllowAmbiguousTypes #-}
+>{-# LANGUAGE AllowAmbiguousTypes #-}
 {-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE OverloadedStrings #-}
 
@@ -90,7 +90,8 @@ class HasTable db entity where
   entityTable :: Q Postgres db s (QExprTable Postgres s entity)
 
 data QueryField db entity where
-  QueryField :: { qfName        :: Text
+  QueryField :: Aeson.FromJSON a
+             => { qfName        :: Text
                 , qfHumanName   :: Text
                 , qfDescription :: Text
                 , qfParser      :: QueryParser a
@@ -282,7 +283,8 @@ guardSearch (Just (Search find)) x = guard_' (find x)
 guardSearch _ _ = pure ()
 
 -- Field parsers
-queryField :: (forall s. entity (QExpr Postgres s)-> QExpr Postgres s a)
+queryField :: Aeson.FromJSON a
+           => (forall s. entity (QExpr Postgres s) -> QExpr Postgres s a)
            -> Text -> Text -> Text -> QueryParser a -> QueryField db entity
 queryField getField nm humanNm desc parser =
   QueryField { qfName = nm
