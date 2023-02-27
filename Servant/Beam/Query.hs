@@ -90,7 +90,7 @@ class HasTable db entity where
   entityTable :: Q Postgres db s (QExprTable Postgres s entity)
 
 data QueryField db entity where
-  QueryField :: Aeson.FromJSON a
+  QueryField :: (Aeson.FromJSON a, BeamSqlBackendCanSerialize Postgres a)
              => { qfName        :: Text
                 , qfHumanName   :: Text
                 , qfDescription :: Text
@@ -283,7 +283,7 @@ guardSearch (Just (Search find)) x = guard_' (find x)
 guardSearch _ _ = pure ()
 
 -- Field parsers
-queryField :: Aeson.FromJSON a
+queryField :: (Aeson.FromJSON a, BeamSqlBackendCanSerialize Postgres a)
            => (forall s. entity (QExpr Postgres s) -> QExpr Postgres s a)
            -> Text -> Text -> Text -> QueryParser a -> QueryField db entity
 queryField getField nm humanNm desc parser =
