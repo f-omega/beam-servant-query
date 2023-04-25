@@ -64,7 +64,8 @@ instance ( HasServer (QueryParam "q" (Search db entity)  :> x) context
           (addMethodCheck dServer optionsCheck)
     where
       optionsCheck = withRequest $ \req ->
-                     if requestMethod req == "PROPFIND"
+                     if requestMethod req == "PROPFIND" ||
+                        lookup "Accept" (requestHeaders req) == Just "application/x-search-options"
                      then liftIO (throwIO (DescribeQueryableException (Proxy @db) (Proxy @entity)))
                      else pure ()
 
@@ -90,12 +91,12 @@ class HasTable db entity where
   entityTable :: Q Postgres db s (QExprTable Postgres s entity)
 
 data QueryField db entity where
-  QueryField :: (Aeson.FromJSON a, BeamSqlBackendCanSerialize Postgres a)
+  QueryField :: (Aeson.FromJSON a, Aeson.ToJSON a, BeamSqlBackendCanSerialize Postgres a)
              => { qfName        :: Text
                 , qfHumanName   :: Text
                 , qfDescription :: Text
                 , qfParser      :: QueryParser a
-                , qfGet         :: forall s. entity (QExpr Postgres s) -> QExpr Postgres s a
+                , qfGet         :: forall s. entity s -> C s a
                 } -> QueryField db entity
 
 encodeQueryFieldJSON :: QueryField db a -> (Aeson.Key, Aeson.Value)
@@ -283,8 +284,9 @@ guardSearch (Just (Search find)) x = guard_' (find x)
 guardSearch _ _ = pure ()
 
 -- Field parsers
-queryField :: (Aeson.FromJSON a, BeamSqlBackendCanSerialize Postgres a)
-           => (forall s. entity (QExpr Postgres s) -> QExpr Postgres s a)
+queryField :: forall a entity db
+            . (Aeson.FromJSON a, Aeson.ToJSON a, BeamSqlBackendCanSerialize Postgres a)
+           => (forall s. entity s -> C s a)
            -> Text -> Text -> Text -> QueryParser a -> QueryField db entity
 queryField getField nm humanNm desc parser =
   QueryField { qfName = nm
